@@ -1,0 +1,81 @@
+﻿@model IEnumerable<SoftPortalBot.Model.DataBaseTable.Request>
+
+@{
+    ViewData["Title"] = "Заявки";
+}
+<div style="padding: 15px; height: 30%; overflow-y: auto;">
+    <h1>Заявки</h1>
+    <table style="width: 100%;" border="1" >
+        <thead border="1">
+            <tr>
+                <th>
+                    Приложение
+                </th>
+                <th>
+                    Создатель заявки
+                </th>
+                <th>
+                    Исполнитель
+                </th>
+                <th>
+                    Причина обращения
+                </th>
+                <th>
+                    Статус заявки
+                </th>
+                <th>
+                    Время создания
+                </th>
+                <th>
+                    Описание проблемы
+                </th>
+                <th>
+                    Ссылка на вложения
+                </th>
+                <th>
+                    Номер компьютера
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody border="1">
+            @foreach (var item in Model)
+            {
+                <tr border="1">
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Application.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Creator.Login)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Executor.Login)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestReason.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestStatus.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProblemDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AttachmentsLink)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ComputerNumber)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

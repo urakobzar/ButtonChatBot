@@ -1,0 +1,244 @@
+﻿.back-button-container {
+    margin-right: 15px;
+    width: 25%;
+    display: none;
+}
+
+.back-button {
+    width: 175px;
+    margin: 10px;
+}
+
+#beginButton {
+    margin-top: 10%;
+}
+
+.botDialog {
+    display: flex;
+    height: 230px;
+    width: 90%;
+}
+
+#buttons {
+    display: none;
+}
+
+
+#botResponse {
+    display: none;
+}
+
+
+#botAdvise .message {
+    height: 200px;
+    width: 100%;
+    background-color: dodgerblue;
+    position: relative;
+}
+
+#mainWindow {
+    height: 700px;
+    width: 50%;
+    border: 5px solid;
+    left: 25%;
+    position: absolute;
+    overflow-y: auto;
+    background-color: snow;
+}
+
+.warningButton {
+    width: 350px;
+    margin: 10px;
+}
+
+.botDialog {
+    display: flex;
+    height: 230px;
+    width: 90%;
+}
+
+.message {
+    background: dodgerblue;
+    border: 0.1875em solid #0F1C3F;
+    box-shadow: 0.375em 0.375em 0 0 rgba(15, 28, 63, 0.125);
+    height: 2em;
+    width: 2em;
+    border-radius: 10px;
+}
+
+#botMessage {
+    font-family: 'Segoe UI';
+    color: white;
+    font-weight: 500;
+    font-size: 25px;
+    padding: 3%;
+    padding-top: 0;
+}
+
+
+#searchInput {
+    box-sizing: border-box;
+    display: none;
+}
+
+#botMessageContainer {
+    position: relative;
+}
+
+.searchForm {
+    position: relative;
+    width: 400px;
+    margin: 0 auto;
+    font-weight: 600;
+    font-size: 20px;
+    font-family: 'Segoe UI';
+}
+
+
+.searchButton {
+    position: absolute;
+    top: 0;
+    right: -55px;
+    width: 100px;
+    height: 40px;
+}
+
+.js-select2 {
+    width: 300px;
+    height: 80px;
+}
+
+.hiddenBlock {
+    display: none;
+}
+
+dialog {
+    background: rgba(255, 255, 255, 0.7);
+    width: 350px;
+    height: 300px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+.botMessageContainer {
+    top: 50%;
+    margin-top: -10%;
+}
+
+
+.circle {
+    background: dodgerblue;
+    border: 0.1875em solid #0F1C3F;
+    border-radius: 50%;
+    box-shadow: 0.375em 0.375em 0 0 rgba(15, 28, 63, 0.125);
+    height: 2em;
+    width: 2em;
+}
+
+.circle-modal {
+    height: 1em;
+    width: 1em;
+}
+
+#requestForm {
+    display: none;
+}
+
+#upperContainerInfoMessage {
+    height: 125px;
+    width: 100%;
+    background-color: dodgerblue;
+    position: relative;
+}
+
+.upperInfoMessage {
+    font-family: 'Segoe UI';
+    color: white;
+    font-weight: 500;
+    font-size: 25px;
+    padding: 3%;
+    padding-top: 0;
+}
+
+#upperFinalInfoMessage {
+    height: 380px;
+    width: 100%;
+    background-color: dodgerblue;
+    position: relative;
+    display: none;
+}
+
+#lowerContainerInfoMessage {
+    height: 80px;
+    width: 450px;
+    background-color: coral;
+    position: relative;
+}
+
+.lowerInfoMessage {
+    font-family: 'Segoe UI';
+    color: white;
+    font-weight: 500;
+    font-size: 25px;
+    padding: 3%;
+    padding-top: 0%;
+}
+
+#lowerFinalInfoMessage {
+    height: 120px;
+    width: 250px;
+    background-color: dodgerblue;
+    position: absolute;
+    display: none;
+    left: 15%;
+}
+
+#searchFormRequest {
+    position: absolute;
+    top: 58%;
+    width: 100%;
+}
+
+#errorMessage {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    color: lightcoral;
+}
+
+#reasonButtons {
+    display: none;
+    margin-top: 185px;
+}
+
+#userDescription {
+    display: none;
+    position: absolute;
+    top: 55%;
+    width: 100%;
+}
+
+#description {
+    height: 190px;
+    width: 600px;
+    resize: none;
+    word-wrap: break-word;
+    padding: 2%;
+}
+
+#requestComputerNumber {
+    display: none;
+    height: 60px;
+    width: 90px;
+    resize: none;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 2%;
+}
+
+.upperMessage {
+}
+
+.lowerMessage {
+}
+

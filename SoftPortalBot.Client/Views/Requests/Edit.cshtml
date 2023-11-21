@@ -1,0 +1,71 @@
+﻿@model SoftPortalBot.Model.DataBaseTable.Request
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div align="center">
+    <h1>Редактирование заявки</h1>
+    <div>
+        <div class="col-md-4" style="margin: 10px;">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div style="height: 20px; color: lightcoral;">@ViewBag.ExecutorError</div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group" style="display: none;">
+                    <label asp-for="ApplicationId" class="control-label"></label>
+                    <select asp-for="ApplicationId" class="form-control" asp-items="ViewBag.ApplicationId"></select>
+                    <span asp-validation-for="ApplicationId" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label asp-for="CreatorId" class="control-label"></label>
+                    <select asp-for="CreatorId" class="form-control" asp-items="ViewBag.CreatorId"></select>
+                    <span asp-validation-for="CreatorId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ExecutorId" class="control-label">Исполнитель</label>
+                    <select asp-for="ExecutorId" class="form-control" asp-items="ViewBag.ExecutorId"></select>
+                    <span asp-validation-for="ExecutorId" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label asp-for="RequestReasonId" class="control-label"></label>
+                    <select asp-for="RequestReasonId" class="form-control" asp-items="ViewBag.RequestReasonId"></select>
+                    <span asp-validation-for="RequestReasonId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StatusId" class="control-label">Статус заявки</label>
+                    <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
+                    <span asp-validation-for="StatusId" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label asp-for="CreateTime" class="control-label"></label>
+                    <input asp-for="CreateTime" class="form-control" />
+                    <span asp-validation-for="CreateTime" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label asp-for="ProblemDescription" class="control-label"></label>
+                    <input asp-for="ProblemDescription" class="form-control" />
+                    <span asp-validation-for="ProblemDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label asp-for="AttachmentsLink" class="control-label"></label>
+                    <input asp-for="AttachmentsLink" class="form-control" />
+                    <span asp-validation-for="AttachmentsLink" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label asp-for="ComputerNumber" class="control-label"></label>
+                    <input asp-for="ComputerNumber" class="form-control" />
+                    <span asp-validation-for="ComputerNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="margin: 10px;">
+                    <input type="submit" value="Сохранить" class="btn btn-primary" />
+                    <a class="btn btn-danger" asp-action="Index">Вернуться назад</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

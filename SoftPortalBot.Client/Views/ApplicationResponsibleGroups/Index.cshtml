@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SoftPortalBot.Model.DataBaseTable.ApplicationResponsibleGroup>
+
+@{
+    ViewData["Title"] = "Приложение/группа";
+}
+<div style="padding: 15px;">
+    <h1>Связь приложения с ответственной группой</h1>
+
+    <p>
+        <a asp-action="Create">Создать новую связь</a>
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Приложение
+            </th>
+            <th>
+                Ответственная группа
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Application.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ResponsibleGroup.Name)
+                </td>
+                <td align="right">
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

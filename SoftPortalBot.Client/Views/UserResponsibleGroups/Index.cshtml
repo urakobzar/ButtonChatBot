@@ -1,0 +1,44 @@
+﻿@model IEnumerable<SoftPortalBot.Model.DataBaseTable.UserResponsibleGroup>
+
+@{
+    ViewData["Title"] = "Пользователь/группа";
+}
+<div style="padding: 15px;">
+    <h1>Связь пользователя с ответственной группой</h1>
+
+    <p>
+        <a asp-action="Create">Создать новую связь</a>
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Пользователь
+            </th>
+            <th>
+               Ответственная группа
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Surname) 
+                    @Html.DisplayFor(modelItem => item.User.Name)  
+                    @Html.DisplayFor(modelItem => item.User.Patronymic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ResponsibleGroup.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

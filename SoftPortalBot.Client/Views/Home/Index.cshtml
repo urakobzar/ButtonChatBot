@@ -1,0 +1,308 @@
+﻿@{
+    ViewData["Title"] = "Виртуальный собеседник";
+}
+
+<br />
+@model SoftPortalBot.Model.DataBaseTable.Request
+@using System.Web
+@using SoftPortalBot.Model.DataBaseContext
+@{
+    var context = new Context();
+}
+<!--Скрытая форма для оформления заявки-->
+<form id="saveForm" method="post" style="display: none">
+    <div class="form-group">
+        <input id="applicationId" asp-for="ApplicationId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input id="requestReasonId" asp-for="RequestReasonId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input id="problemDescription" asp-for="ProblemDescription" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input id="attachmentsLink" asp-for="AttachmentsLink" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input id="computerNumber" asp-for="ComputerNumber" class="form-control" />
+    </div>
+</form>
+<!-- Модальное окно подтверждения заявки -->
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Подтверждение</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Вы точно в этом уверены?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCancel" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                <button id="createRequestButton" type="button" class="btn btn-primary">Да</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Весь экран -->
+<div style="display: flex">
+    <!-- Кнопка назад -->
+    <div id="backButtonContainer" class="back-button-container" align="right">
+        <button id="backButton" type="button" class="btn btn-danger btn-lg back-button" onclick="BackToAppList()">
+            Назад
+        </button>
+    </div>
+    <div id="backHomeContainer" class="back-button-container" align="right">
+        <a id="backHome" type="button" class="btn btn-primary btn-lg back-button" asp-controller="Home" asp-action="Index">
+            На главную
+        </a>
+    </div>
+    <!-- Окно в рамке -->
+    <div id="mainWindow">
+        <!--Диалог с виртуальным собеседником-->
+        <div id="botAdvise">
+            <div class="botDialog" align="center">
+                <div style="display: flex;">
+                    <div style="padding-left: 75px; padding-top: 75px;">
+                        <img src="/Images/bot.png" height="150" width="150" alt="Виртуальный собеседник" />
+                    </div>
+                    <div style="padding-left: 15px; padding-top: 150px;">
+                        <div class="circle"></div>
+                    </div>
+                    <div style="padding-left: 15px; padding-top: 125px;">
+                        <div class="circle"></div>
+                    </div>
+                    <div style="padding-left: 15px; padding-top: 100px;">
+                        <div class="circle"></div>
+                    </div>
+                    <div style="padding-left: 15px; padding-top: 50px;">
+                        <div class="message">
+                            <div id="botMessageContainer">
+                                <div id="botMessage">
+                                    Здравствуйте, я ваш помощник Робот.
+                                    Я постараюсь помочь вам.
+                                    А если я не смогу ответить на ваш вопрос, то
+                                    подскажу как оформить заявку в техническую поддержку.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 50px;">
+                <div id="searchInput" align="center">
+                    <form class="searchForm" align="center">
+                        <select class="js-select2" name="city" placeholder="Выберите приложение">
+                            <option value=""></option>
+                            @{
+                                foreach (var item in ViewBag.AppWithResponse)
+                                {
+                                    <option>@item.Name</option>
+                                }
+                            }
+                        </select>
+                        <button id="searchButton" class="btn btn-info searchButton" type="button" onclick="SearchApp()">Открыть</button>
+                    </form>
+                </div>
+            </div>
+            <div style="margin-top: 75px;">
+                <div align="center" id="beginButton">
+                    <button type="button" class="btn btn-primary btn-lg" style="font-size: 30px;" onclick="DialogBegin()">Начать</button>
+                </div>
+                <div id="buttons" align="center">
+                    <div id="appButtons">
+                        @{
+                            @foreach (var item in ViewBag.AppWithResponse)
+                            {
+                                <button type="button" class="btn btn-primary btn-lg" +
+                                        style="width: 25%; margin: 10px" onclick="ShowKnowledgeBaseButtons('@item.Name', @item.Id)">
+                                    @item.Name
+                                </button>
+                            }
+                        }
+                    </div>
+                    <div id="knowledgeBaseButtons"></div>
+                    <div style="width: 100%; position: absolute; top: 85%;">
+                        <button id="noAppButton" type="button" class="btn btn-warning warningButton">
+                            Нет нужного ПО
+                        </button>
+                        <button id="noResponseButton" type="button" class="btn btn-warning warningButton" style="display: none">
+                            Нет ответа на мой вопрос
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Ответ виртуального собеседника после диалога-->
+        <div id="botResponse" style="padding: 5%;">
+            <div>
+                <h1 id="responseTitle"></h1>
+            </div>
+            <div id="responseContent"></div>
+        </div>
+        <!--Форма создания заявки-->
+        <div id="requestForm" align="center">
+            <div class="botDialog" align="center">
+                <div style="display: flex;" id="upperMessage">
+                    <div style="padding-left: 75px; padding-top: 75px;">
+                        <img src="/Images/bot.png" height="150" width="150" alt="Виртуальный собеседник" />
+                    </div>
+                    <div style="padding-left: 15px; padding-top: 150px;">
+                        <div class="circle upperMessage"></div>
+                    </div>
+                    <div style="padding-left: 15px; padding-top: 125px;">
+                        <div class="circle upperMessage"></div>
+                    </div>
+                    <div style="padding-left: 15px; padding-top: 100px;">
+                        <div class="circle upperMessage"></div>
+                    </div>
+                    <div style="padding-left: 15px; padding-top: 50px;">
+                        <div class="message upperMessage upperContainerInfoMessage" id="upperContainerInfoMessage">
+                            <div style="position: relative;">
+                                <div id="upperInfoMessage" class="upperInfoMessage">
+                                    Для подачи заявки необходимо заполнить некоторую информацию.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message upperMessage" id="upperFinalInfoMessage">
+                            <div style="position: relative;">
+                                <div class="upperInfoMessage">
+                                    Ваша заявка успешно сформирована!<br>
+                                    Об изменении статуса заявки вам придет сообщение на электронную почту. <br>
+                                    При необходимости служба тех. поддержки свяжется с вами. подачи заявки необходимо заполнить некоторую информацию.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex;" id="lowerMessage">
+                <div style="padding-left: 255px; padding-top: 0%;">
+                    <div class="circle lowerMessage" style="background: coral"></div>
+                </div>
+                <div style="padding-left: 15px; padding-top: 2%;">
+                    <div class="circle lowerMessage" style="background: coral"></div>
+                </div>
+                <div style="padding-left: 15px; padding-top: 5%;">
+                    <div class="circle lowerMessage" style="background: coral"></div>
+                </div>
+                <div style="padding-left: 15px; padding-top: 1%;">
+                    <div class="message lowerMessage" id="lowerContainerInfoMessage">
+                        <div style="position: relative;">
+                            <div id="lowerInfoMessage" class="lowerInfoMessage">
+                                Шаг 1. Выберите ПО.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="message lowerMessage" id="lowerFinalInfoMessage">
+                <div style="position: relative;">
+                    <div class="lowerInfoMessage">
+                        Бот помощник всегда рад помочь вам!
+                    </div>
+                </div>
+            </div>
+            <div id="searchFormRequest" align="center">
+                <select class="js-select2" name="city" placeholder="Выберите приложение">
+                    <option value=""></option>
+                    @foreach (var item in context.Applications)
+                    {
+                        <option>@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div id="errorMessage" align="center" ></div>
+            <div id="reasonButtons" align="center">
+                @{
+                    var index = context.RequestReasons.First(item => item.Name.Equals("Установка")).Id;
+                    @foreach (var item in context.RequestReasons)
+                    {
+                        if (item.Id == index)
+                        {
+                            <input type="radio" class="btn-check installReason" name="options-outlined" id="@item.Id" value="@item.Id" autocomplete="off">
+                        }
+                        else
+                        {
+                            <input type="radio" class="btn-check" name="options-outlined" id="@item.Id" value="@item.Id" autocomplete="off">
+
+                        }
+                        <label style="width: 30%; margin: 10px" class="btn btn-outline-secondary" for="@item.Id">@item.Name</label>
+                    }
+                }
+            </div>
+            <div id="userDescription" align="center">
+                <textarea id="description"></textarea>
+                <input id="requestComputerNumber" placeholder="####" maxlength="4" />
+                <div id="attachments">
+                    <form id="form" name="form" enctype="multipart/form-data" method="post">
+                        <input id="files" name="files" type="file" size="1" multiple="" />
+                    </form>
+                </div>
+            </div>
+            <div style="display: flex;" align="center">
+                <button id="backwardButton" style="position: absolute; top: 85%; left: 10%; display: none" class="btn btn-danger btn-lg">&lt;- Назад</button>
+                <button id="forwardButton" style="position: absolute; top: 85%; right: 10%;" class="btn btn-success btn-lg">Дальше -></button>
+                <button id="confirmButton" style="position: absolute; top: 85%; right: 10%; display: none" class="btn btn-primary btn-lg">Создать</button>
+            </div>
+        </div>
+    </div>
+    <!--Диалоговое окно после получения ответа от чат-бота-->
+    <div style="position: absolute; right: 20%; top: 60%">
+        <dialog>
+            <div style="display: flex;">
+                <div style="padding-left: 3%; padding-top: 8%;">
+                    <img src="/Images/bot.png" height="80" width="80" alt="Виртуальный собеседник" />
+                </div>
+                <div style="padding-left: 5px; padding-top: 21%;">
+                    <div class="circle circle-modal"></div>
+                </div>
+                <div style="padding-left: 5px; padding-top: 18%;">
+                    <div class="circle circle-modal"></div>
+                </div>
+                <div style="padding-left: 5px; padding-top: 15%;">
+                    <div class="circle circle-modal"></div>
+                </div>
+                <div style="padding-left: 5px; padding-top: 8%;">
+                    <div class="message" style="height: 70px; width: 150px; background-color: dodgerblue; position: relative;">
+                        <div id="dialogMessageContainer" style="position: relative;">
+                            <div id="dialogMessage" style="font-family: 'Segoe UI'; color: white; font-weight: 500; font-size: 15px; padding: 5%; padding-top: 12px;">
+                                Я вам помог?
+                            </div>
+                        </div>
+                    </div>
+                    <div style="top: 1%; right: 1%; position: absolute; font-weight: 500;">
+                        <button id="closeDialog">X</button>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex">
+                <button id="successButton" class="btn btn-success" +
+                        style="position: absolute; top: 65%; left: 10%; width: 120px; height: 80px;" onclick="ShowSuccessMessage()">
+                    Да
+                </button>
+                <button id="failureButton" class="btn btn-danger" +
+                        style="position: absolute; top: 65%; right: 10%; width: 120px; height: 80px;" onclick="ShowFailureMessage()">
+                    Нет
+                </button>
+                <button id="againButton" class="btn btn-warning" +
+                        style="display: none; position: absolute; top: 65%; left: 10%; width: 120px; height: 80px;" onclick="ShowAgain()">
+                    Попробовать искать снова
+                </button>
+                <button id="requestButton" class="btn btn-warning" +
+                        style="display: none; position: absolute; top: 65%; right: 10%; width: 120px; height: 80px;">
+                    Создать заявку
+                </button>
+            </div>
+        </dialog>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

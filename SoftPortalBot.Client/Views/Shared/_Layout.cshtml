@@ -1,0 +1,103 @@
+﻿@using SoftPortalBot.Client.Controllers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.EntityFrameworkCore
+@using SoftPortalBot.Model.DataBaseContext;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/select2.min.css" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom
+            box-shadow mb-3" style="background-color: dodgerblue;">
+                <div class="container-fluid">
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><b style="font-size: 30px; color:white">Собеседник</b></a>
+                            </li>
+                            @if (!User.IsInRole("Пользователь"))
+                            {
+                                <li class="nav-item">
+                                    <b style="font-size: 30px; color:white">|</b>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="ProblemResponses" asp-action="Index">
+                                        <b style="font-size: 30px; color:white">База ответов</b>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <b style="font-size: 30px; color:white">|</b>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="ApplicationResponsibleGroups" asp-action="Index">
+                                        <b style="font-size: 30px; color:white">Приложение/Группа</b>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <b style="font-size: 30px; color:white">|</b>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="UserResponsibleGroups" asp-action="Index">
+                                        <b style="font-size: 30px; color:white">Пользователь/Группа</b>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <b style="font-size: 30px; color:white">|</b>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Requests" asp-action="Index">
+                                        <b style="font-size: 30px; color:white">Заявки</b>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    @{
+                        var context = new Context();
+                        var user = context.Users.First(u => u.Login == User.Identity.Name);
+                    }
+                    <div>
+                        <p>
+                            <b style="font-size: 20px; color:white">Добро пожаловать, @user.Name @user.Patronymic!</b>
+                        </p>
+                        <br />
+                        <a class="btn btn-light" asp-controller="Account" asp-action="Logout">Выйти из профиля</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    }
+
+    <div>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - Виртуальный собеседник - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/responseFind.js"></script>
+    <script src="~/js/requestFormation.js"></script>
+    <script src="~/js/select2.min.js"></script>
+    <script src="~/js/ru.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

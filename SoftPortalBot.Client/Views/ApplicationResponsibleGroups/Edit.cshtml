@@ -1,0 +1,34 @@
+﻿@model SoftPortalBot.Model.DataBaseTable.ApplicationResponsibleGroup
+
+@{
+    ViewData["Title"] = "Редактирование связи приложение/группа";
+}
+
+<div align="center">
+    <h1>Редактирование связи приложение/ответственная группа</h1>
+    <hr />
+    <div>
+        <div class="col-md-4" style="margin: 10px;">
+            <form asp-action="Edit">
+                <div style="height: 20px; color: lightcoral;">@ViewBag.ConstraintError</div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="ApplicationId" class="control-label">Приложение</label>
+                    <select asp-for="ApplicationId" class="form-control" asp-items="ViewBag.ApplicationId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ResponsibleGroupId" class="control-label">Ответственная группа</label>
+                    <select asp-for="ResponsibleGroupId" class="form-control" asp-items="ViewBag.ResponsibleGroupId"></select>
+                </div>
+                <div class="form-group" style="margin: 10px;">
+                    <input type="submit" value="Сохранить" class="btn btn-primary" />
+                    <a class="btn btn-danger" asp-action="Index">Вернуться назад</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

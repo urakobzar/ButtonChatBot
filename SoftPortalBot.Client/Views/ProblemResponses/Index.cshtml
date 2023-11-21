@@ -1,0 +1,53 @@
+﻿@model IEnumerable<SoftPortalBot.Model.DataBaseTable.ProblemResponse>
+
+@{
+    ViewData["Title"] = "База ответов";
+}
+<div style="padding: 15px;">
+    <h1>База ответов на вопросы для приложений</h1>
+    <p>
+        <a asp-action="Create">Создать новый ответ</a>
+    </p>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Приложение
+            </th>
+            <th>
+                Название ответа
+            </th>
+            <th>
+                Описание ответа
+            </th>
+            <th>
+                Содержание ответа
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Application.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
