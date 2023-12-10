@@ -7,11 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<Context>
                 (options =>
-                    options.UseNpgsql(
-                        "Server = localhost; Port = 5432; Username = postgres;" +
-                        "Password = 1234; Database = MyChatBot;"));
+                    options.UseSqlServer(
+                        "Server = (localdb)\\mssqllocaldb; Database = mobilesdb; Trusted_Connection = True;"));
 
-StartingData.AddAllData();
+
+//StartingData.AddAllData();
 
 // Установка конфигурации подключения.
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

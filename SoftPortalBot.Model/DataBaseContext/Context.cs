@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using NuGet.Protocol.Plugins;
 using SoftPortalBot.Model.DataBaseTable;
 
 namespace SoftPortalBot.Model.DataBaseContext
@@ -33,9 +34,8 @@ namespace SoftPortalBot.Model.DataBaseContext
         /// <param name="optionsBuilder">Настройки базы данных.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(
-                        "Host = localhost; Port = 5432; Username = postgres;" +
-                        "Password = 1234; Database = MyChatBot;");
+            optionsBuilder.UseSqlServer(
+                        "Server = (localdb)\\mssqllocaldb; Database = mobilesdb; Trusted_Connection = True;");
         }
 
         /// <summary>
